@@ -24,46 +24,45 @@ class Sale:
     def __str__(self):
         return (f'Sale {self.sale_id} -> {self.product}'
                 f" x{self.quantity} Units"
-                f' = {self.get_revenue()} TK'          # ✅ fixed ()
+                f' = {self.get_revenue()} TK'          
                 f" On {self.date.strftime('%B %d %Y')}")
 
 
-class Sales_analytics:                                  # ✅ removed (Sale)
-
+class Sales_analytics:                                 
     def __init__(self, lists_of_sale):
         self.sales = lists_of_sale
 
     def total_revenue(self):
         total = 0
         for i in self.sales:
-            total += i.get_revenue()                    # ✅ fixed
+            total += i.get_revenue()                   
         return total
 
     def revenue_by_category(self):
         category_totals = defaultdict(float)
         for sale in self.sales:
             category = sale.product.category
-            category_totals[category] += sale.get_revenue()  # ✅ fixed
+            category_totals[category] += sale.get_revenue()  
         return dict(sorted(category_totals.items(), key=lambda x: x[1], reverse=True))
 
     def top_product(self, how_many=3):
         product_totals = defaultdict(float)
         for sale in self.sales:
-            product_totals[sale.product.name] += sale.get_revenue()  # ✅ fixed
-        ranked = sorted(product_totals.items(), key=lambda x: x[1], reverse=True)  # ✅ fixed
+            product_totals[sale.product.name] += sale.get_revenue()  
+        ranked = sorted(product_totals.items(), key=lambda x: x[1], reverse=True)  
         return ranked[:how_many]
 
     def monthly_trend(self):
         monthly = defaultdict(float)
         for sale in self.sales:
-            month_key = sale.date.strftime("%Y-%m")     # ✅ fixed strptime → strftime
-            monthly[month_key] += sale.get_revenue()    # ✅ fixed
+            month_key = sale.date.strftime("%Y-%m")     
+            monthly[month_key] += sale.get_revenue()  
         return dict(sorted(monthly.items()))
 
     def average_order_value(self):
         if len(self.sales) == 0:
             return 0
-        return self.total_revenue() / len(self.sales)  # ✅ fixed ()
+        return self.total_revenue() / len(self.sales)
 
     def print_report(self):
         print()
@@ -79,7 +78,7 @@ class Sales_analytics:                                  # ✅ removed (Sale)
             print(f'   -> {category} : {revenue:,.2f}')
 
         print("  🏆 TOP 3 Best-Selling Products:")
-        for rank, (product_name, revenue) in enumerate(self.top_product(), start=1):  # ✅ fixed
+        for rank, (product_name, revenue) in enumerate(self.top_product(), start=1): 
             print(f'   {rank}. {product_name:<20} ${revenue:,.2f}')
 
         print("\n" + "=" * 25)
