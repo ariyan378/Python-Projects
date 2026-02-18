@@ -13,7 +13,7 @@ class Product:
     def __str__(self):
         return f' {self.name} | Category : {self.category} | Price : {self.price}'
 
-class Sale:
+class Sale(Product):
     
     def __init__(self , sale_id , product ,quantity , date_str):
         
@@ -34,3 +34,27 @@ class Sale:
                  f" On {self.date.strftime('%B %d %Y')}"
                 )
     
+class Sales_analytics(Sale):
+    
+    def __init__(self , lists_of_sale):
+        self.sales = lists_of_sale
+    
+    def total_revenue(self):
+        
+        total = 0
+        
+        for i in self.sales:
+            total+= Sale.get_revenue()  
+        
+        return total    
+    
+    def revenue_by_category(self):
+        
+        category_totals = defaultdict(float)
+        
+        for sale in self.sales:
+            
+            category = sale.product.category
+            category_totals[category]+=Sale.get_revenue()
+            
+                  
