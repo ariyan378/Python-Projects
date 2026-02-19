@@ -4,7 +4,7 @@ from collections import defaultdict
 class Product:
     def __init__(self, name, category, price):
         self.name = name
-        self.category = category
+        self.category = category  # storin a single product details which is name ,  category  ,  price
         self.price = price
 
     def __str__(self):
@@ -15,11 +15,12 @@ class Sale:
     def __init__(self, sale_id, product, quantity, date_str):
         self.sale_id = sale_id
         self.product = product
-        self.quantity = quantity
+        self.quantity = quantity    #details of a single sale which is id , product , how  much and time of that sale
+        
         self.date = datetime.strptime(date_str, "%Y-%m-%d")
 
     def get_revenue(self):
-        return self.quantity * self.product.price
+        return self.quantity * self.product.price  # total revenue regardless of category
 
     def __str__(self):
         return (f'Sale {self.sale_id} -> {self.product}'
@@ -34,8 +35,8 @@ class Sales_analytics:
 
     def total_revenue(self):
         total = 0
-        for i in self.sales:
-            total += i.get_revenue()                   
+        for sale in self.sales:
+            total += sale.get_revenue()                   
         return total
 
     def revenue_by_category(self):
@@ -68,6 +69,15 @@ class Sales_analytics:
             month_key = sale.date.strftime("%Y-%m")     
             monthly[month_key] += sale.get_revenue()  
         return dict(sorted(monthly.items()))
+    
+    def yearly_trend(self):
+        yearly = defaultdict(float)
+        
+        for sale in self.sales:
+            year_key = sale.date.strftime("%Y")
+            yearly[year_key]+=sale.get_revenue()
+        
+        return dict(sorted(yearly.items()))    
 
     def average_order_value(self):
         if len(self.sales) == 0:
@@ -94,7 +104,12 @@ class Sales_analytics:
         print( " Lowest Selling Among them : Top 3 ")
         
         for rankeds ,(product_name , revenue) in enumerate(self.lowest_product(),start= 1):
-            print(f'{rankeds} . {product_name} -> {revenue:,.2f}Tk')    
+            print(f'{rankeds} . {product_name} -> {revenue:,.2f}Tk')
+        
+        print("Yearly Sale") 
+        
+        for rank , (product_name, revenue)  in enumerate(self.yearly_trend().items(), start = 1) :
+            print(f"{rank}. {product_name} -> {revenue}")  
 
         print("\n" + "=" * 25)
         
