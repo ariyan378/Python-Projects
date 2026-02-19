@@ -51,6 +51,16 @@ class Sales_analytics:
             product_totals[sale.product.name] += sale.get_revenue()  
         ranked = sorted(product_totals.items(), key=lambda x: x[1], reverse=True)  
         return ranked[:how_many]
+    
+    def lowest_product(self , how_many=3):
+        
+        products = defaultdict(float)
+        for sale in self.sales:
+            products[sale.product.name]+= sale.get_revenue()
+        
+        rankeds = sorted(products.items() , key=lambda x: x[1])
+        
+        return rankeds[:how_many]    
 
     def monthly_trend(self):
         monthly = defaultdict(float)
@@ -80,8 +90,14 @@ class Sales_analytics:
         print("  🏆 TOP 3 Best-Selling Products:")
         for rank, (product_name, revenue) in enumerate(self.top_product(), start=1): 
             print(f'   {rank}. {product_name:<20} ${revenue:,.2f}')
+            
+        print( " Lowest Selling Among them : Top 3 ")
+        
+        for rankeds ,(product_name , revenue) in enumerate(self.lowest_product(),start= 1):
+            print(f'{rankeds} . {product_name} -> {revenue:,.2f}Tk')    
 
         print("\n" + "=" * 25)
+        
         
 if __name__ == "__main__":
 
